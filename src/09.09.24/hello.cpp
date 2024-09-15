@@ -40,10 +40,10 @@ void equationSolve(double a, double b, double c) {
     }
 
     if (x_roots.empty()) {
-        cout << "Нет действительных решений для x." << endl;
+        cout<<"Нет действительных решений для x."<<endl;
     } else {
         int n = 1;
-        cout << "Решения биквадратного уравнения:" << endl;
+        cout<<"Решения биквадратного уравнения:"<<endl;
         for (double x : x_roots) {
             cout<<"x"<<n++<<" = "<<x<< endl;
         }
