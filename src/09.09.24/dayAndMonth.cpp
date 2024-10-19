@@ -35,7 +35,7 @@ const char* monthName(int n) {
         "December"
     };
     
-    return (n<1||n>12) ? month[0] : month[n];
+    return (n<1||n>12) ? month[0] : month[n-1];
 }
 
 int main() {
