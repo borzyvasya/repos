@@ -3,6 +3,25 @@
 
 using namespace std;
 
+const char* dayName(int n);
+const char* monthName(int n);
+
+int main() {
+    int dayNumber, monthNumber;
+    
+    cout<<"Input number of day: "; 
+    cin>>dayNumber; 
+    cout<<dayName(dayNumber)<<endl;
+
+
+    cout<<"Input number of month: ";
+    cin>>monthNumber;
+    cout<<monthName(monthNumber)<<endl; 
+    
+    
+    return EXIT_SUCCESS;
+}
+
 const char* dayName(int n) {
     const char* day[] = {
         "No such day",
@@ -36,14 +55,4 @@ const char* monthName(int n) {
     };
     
     return (n<1||n>12) ? month[0] : month[n];
-}
-
-int main() {
-    int dayNumber, monthNumber;
-    
-    cout<<"Input number of day: "; cin>>dayNumber; cout<<dayName(dayNumber)<<endl; 
-    cout<<"Input number of month: "; cin>>monthNumber; cout<<monthName(monthNumber)<<endl; 
-    
-    
-    return EXIT_SUCCESS;
 }
