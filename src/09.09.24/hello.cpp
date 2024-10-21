@@ -14,7 +14,7 @@ int main() {
     
     
     findRoots(a, b, c);
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void findRoots(float a, float b, float c) {
