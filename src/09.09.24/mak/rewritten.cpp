@@ -14,7 +14,7 @@ int main() {
 
     cin >> x >> y >> z;
 
-    s = 0;; 
+    s = 0; 
     
     return EXIT_SUCCESS;
 }
