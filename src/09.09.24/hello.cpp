@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void findRoots(float, float, float);
+void findRoots(float&, float&, float&);
 
 int main() {
     float a, b, c;
@@ -19,7 +19,7 @@ int main() {
     return EXIT_SUCCESS;
 }
 
-void findRoots(float a, float b, float c) {
+void findRoots(float& a, float& b, float& c) {
     float d, x1, x2;
     
     d = (b*b) - (4*a*c);
