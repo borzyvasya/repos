@@ -9,7 +9,7 @@ const char* monthName(int n);
 int main() {
     int dayNumber, monthNumber;
     
-    cout<<"Input number of day: "; 
+    cout<<"Input number of day: ";  
     cin>>dayNumber; 
     cout<<dayName(dayNumber)<<endl;
 
