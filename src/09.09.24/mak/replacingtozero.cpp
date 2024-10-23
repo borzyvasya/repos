@@ -1,12 +1,10 @@
 #include <cstdlib>
 #include <iostream>
-#include <istream>
 
 
 using namespace std;
 
 float maxfloat(float&, float&);
-
 
 int main() {
     float a, b;
