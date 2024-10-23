@@ -1,7 +1,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
-#include <iomanip> 
 
 using namespace std;
 
@@ -24,9 +23,9 @@ void findRoots(float& a, float& b, float& c) {
     float d, x1, x2;
     
     d = (b*b) - (4*a*c);
-    cout << "Квадратное уравнение: " << a << "x^2 + " << b << "x + " << c << " = 0" << endl;
+    cout << "Квадратное уравнение: " << a << "x^2 + " << b << "x + " << c << " = 0" << endl<<endl;
 
-    cout<<"discriminant = "<<d<<endl;
+    cout<<"discriminant = "<<d<<endl<<endl;
 
     if (d < 0) {
         cout<<"no solution"<<endl;
