@@ -16,7 +16,7 @@ bool containsB(const string& input) {
 int main() {
     string input;
 
-    cout << "Введите строку (состоящую из символов 'a' и 'b'): ";
+    cout << "введите строку (состоящую из символов 'a' и 'b'): ";
     cin >> input;
 
     if (containsB(input)) {
