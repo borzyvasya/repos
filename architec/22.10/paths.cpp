@@ -5,5 +5,8 @@ using namespace std;
 
 
 int main() {
+
+    cout<<"sdadsa"<<endl; 
+
     return EXIT_SUCCESS;
 }
