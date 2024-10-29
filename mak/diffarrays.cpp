@@ -1,48 +1,61 @@
-#include <cstdlib>
-#include <iostream>
+#include <cstdlib> // Подключаем библиотеку для стандартных функций C, включая EXIT_SUCCESS
+#include <iostream> // Подключаем библиотеку для ввода-вывода
 
-using namespace std;
+using namespace std; // Используем пространство имен std для упрощения синтаксиса
 
+const int MAX_SIZE = 12; // Определяем константу MAX_SIZE, которая задает максимальный размер массивов
 
-const int MAX_SIZE = 12;
-
-void forArrayC(int[], int[], int[], int); 
-void inputArray(int[], int);
-
+// Объявляем функции для формирования массива C и для вывода массивов
+void forArrayC(int A[], int B[], int C[], int m); 
+void outputArray(int Array[], int size);
 
 int main() {
-    int A[MAX_SIZE] {6, 2, 3, 4, 1, 4, 6, 9, 3, 6, 1, 7};
-    int B[MAX_SIZE] {4, 6, 7, 8, 6, 1, 8, 4};
-    int C[MAX_SIZE];
+    // Инициализируем массив A с 12 элементами
+    int A[MAX_SIZE] = {6, 2, 3, 4, 1, 4, 6, 9, 3, 6, 1, 7};
     
+    // Инициализируем массив B с 12 элементами, добавляем нули для заполнения
+    int B[MAX_SIZE] = {4, 6, 7, 8, 6, 1, 8, 4, 0, 0, 0, 0}; // Заполняем оставшиеся элементы нулями
+    
+    // Инициализируем массив C, который будет заполнен в функции
+    int C[MAX_SIZE]; // Массив C изначально не инициализирован, но будет заполнен в функции
+
+    // Вызываем функцию для формирования массива C на основе массивов A и B
     forArrayC(A, B, C, MAX_SIZE);
 
+    // Выводим массив A
     cout << "Array A: " << endl;
-    inputArray(A, MAX_SIZE);
+    outputArray(A, MAX_SIZE); // Вызываем функцию для вывода массива A
 
+    // Выводим массив B
     cout << "Array B: " << endl;
-    inputArray(B, MAX_SIZE);
+    outputArray(B, MAX_SIZE); // Вызываем функцию для вывода массива B
 
+    // Выводим массив C
     cout << "Array C: " << endl;
-    inputArray(C, MAX_SIZE);
+    outputArray(C, MAX_SIZE); // Вызываем функцию для вывода массива C
 
-
-    return EXIT_SUCCESS;
+    return EXIT_SUCCESS; // Завершаем программу с успешным статусом
 }
 
+// Функция для формирования массива C на основе массивов A и B
 void forArrayC(int A[], int B[], int C[], int m) {
-    int S = 0;
-    for (int i = 0; i < MAX_SIZE; ++i) {
-        C[i] = B[MAX_SIZE - 1 - i] + A[i];
-        S += C[i];
+    int S = 0; // Инициализируем переменную для хранения суммы элементов массива C
+
+    // Цикл для вычисления каждого элемента массива C
+    for (int i = 0; i < MAX_SIZE; ++i) { // Проходим по всем элементам от 0 до MAX_SIZE-1
+        C[i] = B[MAX_SIZE - 1 - i] + A[i]; // Формируем элемент C[i] как сумму соответствующих элементов массива B и A
+        S += C[i]; // Добавляем значение C[i] к сумме S
     }
 
-    cout << "Sum is " << S << endl << endl;
+    // Выводим сумму элементов массива C
+    cout << "Sum is " << S << endl << endl; 
 }
 
-void inputArray(int Array[], int MAX_SIZE) {
-    for (int i = 0; i < MAX_SIZE; i++) {
-        cout << Array[i] << endl;
+// Функция для вывода массива на экран
+void outputArray(int Array[], int size) {
+    for (int i = 0; i < size; i++) { // Проходим по всем элементам массива
+        cout << Array[i] << endl; // Выводим текущий элемент массива
     }
-    cout << endl;
+    cout << endl; // Печатаем пустую строку для разделения выводов
 }
+
