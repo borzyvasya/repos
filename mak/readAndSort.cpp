@@ -43,13 +43,10 @@ int main() {
 
 void forArrayC(int A[], int B[], int C[]) {
     int S = 0; 
-
     for (int i = 0; i < MAX_SIZE; ++i) { 
         C[i] = B[MAX_SIZE - i - 1] + A[i]; 
-                                  
         S += C[i];                  
     }
-
     cout << "Sum is " << S << endl << endl;
 }
 
