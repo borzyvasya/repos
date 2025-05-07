@@ -1,5 +1,4 @@
 
-#include <cstdlib> // Подключаем библиотеку для стандартных функций C, включая EXIT_SUCCESS
 #include <iostream> // Подключаем библиотеку для ввода-вывода
 #include <fstream> // Подключаем библиотеку для работы с файлами
 #include <memory>
@@ -9,10 +8,10 @@ using namespace std; // Используем пространство имен s
 const int MAX_SIZE = 12; // Определяем константу MAX_SIZE, которая задает максимальный размер массивов
 
 // Объявляем функции для формирования массива C и для вывода массивов
-void forArrayC(int* A, int* B, int* C, int m); 
-void outputArray(int* Array, int size);
+void forArrayC(int*, int*, int*, int); 
+void outputArray(int*, int);
 void delArrays(int[], int[], int[]);
-bool loadArraysFromf(const string& filename, int* A, int* B);
+bool loadArraysFromf(const string&, int*, int*);
 
 int main() {
     // Инициализируем динамические массивы A и B с 12 элементами
