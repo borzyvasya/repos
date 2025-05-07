@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Release\\Vector.h.obj",
+            "outputs": [
+                "C:\\Users\\Me\\source\\repos\\borzyvasya\\another\\VALAKASTHEN\\ArrAndVector\\x64\\Release\\vc143.pdb",
+                "x64\\Release\\",
+                "C:\\Users\\Me\\source\\repos\\borzyvasya\\another\\VALAKASTHEN\\ArrAndVector\\x64\\Release\\Vector.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "Vector.h",
+                    "source-path": "c:\\users\\me\\source\\repos\\borzyvasya\\another\\valakasthen\\arrandvector\\vector.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}
