@@ -1,11 +1,12 @@
 ﻿#include <iostream>
 #include <iomanip>
+#include <cmath>
 
 using namespace std;
 
 int NRHS;
 const int p = 8, NZ = 2;
-const double EPS = 1e-04;
+const double EPS = 0.0001;
 
 void runExplicitEuler(int, double, double, double[], double[], double[]);
 void runImplicitEuler(int, double, double, double[], double[], const double[]);
@@ -17,8 +18,12 @@ void deriv(double, double[], double[]);
 
 bool checkConvergence(double, double, double); // Функция для проверки сходимости
 
+void runRungeKutta(int, double, double, double[], double[]);
+void rungeKuttaStep(double&, double, double[]);
+
+
 int main() {
-    const int n = 10, m = n + 1;
+    const int n = 1000, m = n + 1;
     double xout[m] = { NAN }, yout1[m] = { NAN }, yout2[m] = { NAN }, testout[m] = { NAN };
     double miny, maxy, ystep;
 
@@ -27,13 +32,33 @@ int main() {
     runImplicitEuler(n, 0.0, 1.0, xout, yout2, testout);
     computeMinMax(m, yout1, yout2, testout, miny, maxy, ystep);
 
+    double diff = fabs(yout1[n] - yout2[n]);
+    cout << "\nFinal Y-difference: " << diff << (diff < EPS ? " ✅ OK" : " ❌ Too large") << endl;
+
+    double youtRK[m] = { NAN };
+    runRungeKutta(n, 0.0, 1.0, xout, youtRK);
+
+    double diffExplicit = fabs(youtRK[n] - yout1[n]);
+    double diffImplicit = fabs(youtRK[n] - yout2[n]);
+
+    cout << "\nDifference at x = 1.0:\n";
+    cout << "Explicit Euler vs Runge-Kutta: " << diffExplicit << endl;
+    cout << "Implicit Euler vs Runge-Kutta: " << diffImplicit << endl;
+
+    cout << setprecision(8) << "\nFinal Y-difference between explEuler and RungeKutta: " << diffExplicit
+    << (diffExplicit < EPS ? " ✅ OK" : " ❌ Too large") << endl;
+
+    cout << "\nFinal Y-difference between implEuler and RungeKutta: " << diffImplicit
+    << (diffImplicit < EPS ? " ✅ OK" : " ❌ Too large") << endl;
+
+
     return EXIT_SUCCESS;
 }
 
 void runExplicitEuler(int n, double xbeg, double xend, double xout[], double yout1[], double testout[]) {
     double x = xbeg;
     double y[NZ] = { 1.0, 0.5 };  // y1(0) = 1, y2(0) = 0.5
-    double h = (xend - xbeg) / n; // чтобы шаг был равен 0,1
+    double h = (xend - xbeg) / n;
 
     xout[0] = x;
     yout1[0] = y[0];
@@ -148,4 +173,50 @@ void deriv(double x, double y[], double dydx[]) {
 
 bool checkConvergence(double ycurrent, double yprev, double eps) {
     return fabs(ycurrent - yprev) < eps;  // если разница меньше eps
+}
+
+void runRungeKutta(int n, double xbeg, double xend, double xout[], double yout[]) {
+    double x = xbeg;
+    double y[NZ] = { 1.0, 0.5 }; // начальные условия
+    double h = (xend - xbeg) / n;
+
+    xout[0] = x;
+    yout[0] = y[0];
+
+    cout << "\nRUNGE-KUTTA 4TH ORDER, with h = " << h << endl;
+    cout << "FOR X = " << setw(p) << fixed << setprecision(4) << x
+         << ", Y = " << setw(p) << y[0] << endl;
+
+    for (int i = 0; i < n; ++i) {
+        rungeKuttaStep(x, h, y);
+        xout[i + 1] = x;
+        yout[i + 1] = y[0];
+
+        cout << "FOR X = " << setw(p) << x
+             << ", Y = " << y[0] << endl;
+    }
+}
+
+void rungeKuttaStep(double& x, double h, double y[]) {
+    double k1[NZ], k2[NZ], k3[NZ], k4[NZ], yt[NZ];
+    double x_half = x + h / 2.0, x_full = x + h;
+
+    deriv(x, y, k1);
+    for (int i = 0; i < NZ; ++i)
+        yt[i] = y[i] + h * k1[i] / 2.0;
+
+    deriv(x_half, yt, k2);
+    for (int i = 0; i < NZ; ++i)
+        yt[i] = y[i] + h * k2[i] / 2.0;
+
+    deriv(x_half, yt, k3);
+    for (int i = 0; i < NZ; ++i)
+        yt[i] = y[i] + h * k3[i];
+
+    deriv(x_full, yt, k4);
+
+    for (int i = 0; i < NZ; ++i)
+        y[i] += h / 6.0 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+
+    x = x_full;
 }
