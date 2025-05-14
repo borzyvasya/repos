@@ -45,6 +45,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "randsort", "..\randsort\ran
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "replacingtoz", "..\replacingtoz\replacingtoz.vcxproj", "{BE3F186B-CDF8-4568-9EE8-D8E04C583105}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kohi", "..\kohi\kohi.vcxproj", "{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -221,6 +223,14 @@ Global
 		{BE3F186B-CDF8-4568-9EE8-D8E04C583105}.Release|x64.Build.0 = Release|x64
 		{BE3F186B-CDF8-4568-9EE8-D8E04C583105}.Release|x86.ActiveCfg = Release|Win32
 		{BE3F186B-CDF8-4568-9EE8-D8E04C583105}.Release|x86.Build.0 = Release|Win32
+		{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}.Debug|x64.ActiveCfg = Debug|x64
+		{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}.Debug|x64.Build.0 = Debug|x64
+		{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}.Debug|x86.ActiveCfg = Debug|Win32
+		{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}.Debug|x86.Build.0 = Debug|Win32
+		{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}.Release|x64.ActiveCfg = Release|x64
+		{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}.Release|x64.Build.0 = Release|x64
+		{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}.Release|x86.ActiveCfg = Release|Win32
+		{CFEA7FBC-2BA5-4A0F-AF90-8FC85E64C123}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,4 @@
-﻿/*
-Решить задачу Коши на отрезке x = [0, 1] (устанавливается в параметрах функции внутри main()),
-приняв eps=1e-04
-y'1=y1^2 / (y2 - x); y1(0) = 1 // в deriv() функции
-y'2=y1 + 1; y2(0)=0.5 // начальные условия внутри функций runExplicitEuler() и runImplicitEuler() 
-*/
-
-#include <iostream>
+﻿#include <iostream>
 #include <iomanip>
 
 using namespace std;
@@ -22,7 +15,7 @@ void explicitEuler(double&, double, double[]);
 void implicitEuler(double&, double, double[]);
 void deriv(double, double[], double[]);
 
-inline double check(double);
+bool checkConvergence(double, double, double); // Функция для проверки сходимости
 
 int main() {
     const int n = 10, m = n + 1;
@@ -44,22 +37,25 @@ void runExplicitEuler(int n, double xbeg, double xend, double xout[], double you
 
     xout[0] = x;
     yout1[0] = y[0];
-    testout[0] = check(x);
     NRHS = 0;
 
     cout << "EULER EXPLICIT SCHEME, with h = " << h << endl;
     cout << "FOR X = " << setw(p) << fixed << setprecision(4) << x
-        << ", Y = " << setw(p) << y[0]
-        << ", TEST = " << setw(p) << testout[0] << endl;
+        << ", Y = " << setw(p) << y[0] << endl;
 
     for (int i = 0; i < n; ++i) {
         explicitEuler(x, h, y);
+
+        // Проверка сходимости на каждом шаге
+        if (checkConvergence(y[0], yout1[i], EPS)) {
+            cout << "Convergence reached at step " << i << ", X = " << x << ", Y = " << y[0] << endl;
+            break; // Выход из цикла, если сходимость достигнута
+        }
+
         xout[i + 1] = x;
         yout1[i + 1] = y[0];
-        testout[i + 1] = check(x);
         cout << "FOR X = " << setw(p) << x
-            << ", Y = " << y[0]
-            << ", TEST = " << testout[i + 1] << endl;
+            << ", Y = " << y[0] << endl;
     }
 
     cout << "NRHS = " << NRHS << endl;
@@ -76,16 +72,21 @@ void runImplicitEuler(int n, double xbeg, double xend, double xout[], double you
 
     cout << "\nEULER IMPLICIT SCHEME, with h = " << h << endl;
     cout << "FOR X = " << setw(p) << fixed << setprecision(4) << x
-        << ", Y = " << setw(p) << y[0]
-        << ", TEST = " << setw(p) << testout[0] << endl;
+        << ", Y = " << setw(p) << y[0] << endl;
 
     for (int i = 0; i < n; ++i) {
         implicitEuler(x, h, y);
+
+        // Проверка сходимости на каждом шаге
+        if (checkConvergence(y[0], yout2[i], EPS)) {
+            cout << "Convergence reached at step " << i << ", X = " << x << ", Y = " << y[0] << endl;
+            break; // Выход из цикла, если сходимость достигнута
+        }
+
         xout[i + 1] = x;
         yout2[i + 1] = y[0];
         cout << "FOR X = " << setw(p) << x
-            << ", Y = " << y[0]
-            << ", TEST = " << testout[i + 1] << endl;
+            << ", Y = " << y[0] << endl;
     }
 
     cout << "NRHS = " << NRHS << endl;
@@ -132,6 +133,7 @@ void implicitEuler(double& x, double h, double y[]) {
     }
 }
 
+
 void deriv(double x, double y[], double dydx[]) {
     double num = y[0] * y[0];
     double denom = y[1] - x;
@@ -144,6 +146,6 @@ void deriv(double x, double y[], double dydx[]) {
     dydx[1] = y[0] + 1.0;
 }
 
-inline double check(double x) {
-    return (2.0 * (x + 1.0) - 3.0 * exp(x - 1.0));
+bool checkConvergence(double ycurrent, double yprev, double eps) {
+    return fabs(ycurrent - yprev) < eps;  // если разница меньше eps
 }
