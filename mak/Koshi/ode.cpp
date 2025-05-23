@@ -1,64 +1,66 @@
 ﻿#include <iostream>
 #include <iomanip>
-#include <cmath>
+#include <fstream>
+#include <string>
+#include <discpp.h>
+
 
 using namespace std;
 
 int NRHS;
 const int p = 8, NZ = 2;
-const double EPS = 0.0001;
+const float EPS = 0.0001;
 
-void runExplicitEuler(int, double, double, double[], double[], double[]);
-void runImplicitEuler(int, double, double, double[], double[], const double[]);
-void computeMinMax(int, const double[], const double[], const double[], double&, double&, double&);
+const int n = 600, m = n + 1;
+float xout[m] = { NAN }, yout1[m] = { NAN }, yout2[m] = { NAN }, testout[m] = { NAN };
+float miny, maxy, ystep;
 
-void explicitEuler(double&, double, double[]);
-void implicitEuler(double&, double, double[]);
-void deriv(double, double[], double[]);
+const int maxX = 100;
 
-bool checkConvergence(double, double, double); // Функция для проверки сходимости
+void runExplicitEuler(int, float, float, float[], float[], float[]);
+void runImplicitEuler(int, float, float, float[], float[], const float[]);
+void computeMinMax(int, const float[], const float[], const float[], float&, float&, float&);
 
-void runRungeKutta(int, double, double, double[], double[]);
-void rungeKuttaStep(double&, double, double[]);
+void explicitEuler(float&, float, float[]);
+void implicitEuler(float&, float, float[]);
+void deriv(float, float[], float[]);
+
+bool checkConvergence(float, float, float); // Функция для проверки сходимости
+
+void runRungeKutta(int, float, float, float[], float[]);
+void rungeKuttaStep(float&, float, float[]);
+void plotHyperbola();
 
 
 int main() {
-    const int n = 1000, m = n + 1;
-    double xout[m] = { NAN }, yout1[m] = { NAN }, yout2[m] = { NAN }, testout[m] = { NAN };
-    double miny, maxy, ystep;
 
-    // [0, 1] - отрезок в параметрах
     runExplicitEuler(n, 0.0, 1.0, xout, yout1, testout);
     runImplicitEuler(n, 0.0, 1.0, xout, yout2, testout);
     computeMinMax(m, yout1, yout2, testout, miny, maxy, ystep);
 
-    double diff = fabs(yout1[n] - yout2[n]);
-    cout << "\nFinal Y-difference: " << diff << (diff < EPS ? " ✅ OK" : " ❌ Too large") << endl;
 
-    double youtRK[m] = { NAN };
+    float youtRK[m] = { NAN };
     runRungeKutta(n, 0.0, 1.0, xout, youtRK);
 
-    double diffExplicit = fabs(youtRK[n] - yout1[n]);
-    double diffImplicit = fabs(youtRK[n] - yout2[n]);
+    float diffExplicit = fabs(youtRK[n] - yout1[n]);
+    float diffImplicit = fabs(youtRK[n] - yout2[n]);
 
-    cout << "\nDifference at x = 1.0:\n";
-    cout << "Explicit Euler vs Runge-Kutta: " << diffExplicit << endl;
-    cout << "Implicit Euler vs Runge-Kutta: " << diffImplicit << endl;
 
     cout << setprecision(8) << "\nFinal Y-difference between explEuler and RungeKutta: " << diffExplicit
-    << (diffExplicit < EPS ? " ✅ OK" : " ❌ Too large") << endl;
+        << (diffExplicit < EPS ? " OK" : " Too large") << endl;
 
     cout << "\nFinal Y-difference between implEuler and RungeKutta: " << diffImplicit
-    << (diffImplicit < EPS ? " ✅ OK" : " ❌ Too large") << endl;
+        << (diffImplicit < EPS ? " OK" : " Too large") << endl;
 
+    plotHyperbola();
 
     return EXIT_SUCCESS;
 }
 
-void runExplicitEuler(int n, double xbeg, double xend, double xout[], double yout1[], double testout[]) {
-    double x = xbeg;
-    double y[NZ] = { 1.0, 0.5 };  // y1(0) = 1, y2(0) = 0.5
-    double h = (xend - xbeg) / n;
+void runExplicitEuler(int n, float xbeg, float xend, float xout[], float yout1[], float testout[]) {
+    float x = xbeg;
+    float y[NZ] = { 1.0, 0.5 };  // y1(0) = 1, y2(0) = 0.5
+    float h = (xend - xbeg) / n;
 
     xout[0] = x;
     yout1[0] = y[0];
@@ -86,10 +88,10 @@ void runExplicitEuler(int n, double xbeg, double xend, double xout[], double you
     cout << "NRHS = " << NRHS << endl;
 }
 
-void runImplicitEuler(int n, double xbeg, double xend, double xout[], double yout2[], const double testout[]) {
-    double x = xbeg;
-    double y[NZ] = { 1.0, 0.5 };  // y1(0) = 1, y2(0) = 0.5
-    double h = (xend - xbeg) / n;
+void runImplicitEuler(int n, float xbeg, float xend, float xout[], float yout2[], const float testout[]) {
+    float x = xbeg;
+    float y[NZ] = { 1.0, 0.5 };  // y1(0) = 1, y2(0) = 0.5
+    float h = (xend - xbeg) / n;
 
     xout[0] = x;
     yout2[0] = y[0];
@@ -117,8 +119,8 @@ void runImplicitEuler(int n, double xbeg, double xend, double xout[], double you
     cout << "NRHS = " << NRHS << endl;
 }
 
-void computeMinMax(int m, const double yout1[], const double yout2[], const double testout[],
-    double& miny, double& maxy, double& ystep) {
+void computeMinMax(int m, const float yout1[], const float yout2[], const float testout[],
+    float& miny, float& maxy, float& ystep) {
     miny = maxy = yout1[0];
 
     for (int i = 0; i < m; ++i) {
@@ -129,8 +131,8 @@ void computeMinMax(int m, const double yout1[], const double yout2[], const doub
     ystep = (maxy - miny) / 10.0;
 }
 
-void explicitEuler(double& x, double h, double y[]) {
-    double dydx[NZ], yprev[NZ];
+void explicitEuler(float& x, float h, float y[]) {
+    float dydx[NZ], yprev[NZ];
     deriv(x, y, dydx);
 
     for (int i = 0; i < NZ; i++) {
@@ -141,8 +143,8 @@ void explicitEuler(double& x, double h, double y[]) {
     x += h;
 }
 
-void implicitEuler(double& x, double h, double y[]) {
-    double yprev[NZ], f1[NZ], f2[NZ], dydx[NZ];
+void implicitEuler(float& x, float h, float y[]) {
+    float yprev[NZ], f1[NZ], f2[NZ], dydx[NZ];
     deriv(x, y, dydx);
     for (int i = 0; i < NZ; i++) {
         yprev[i] = y[i];
@@ -159,9 +161,9 @@ void implicitEuler(double& x, double h, double y[]) {
 }
 
 
-void deriv(double x, double y[], double dydx[]) {
-    double num = y[0] * y[0];
-    double denom = y[1] - x;
+void deriv(float x, float y[], float dydx[]) {
+    float num = y[0] * y[0];
+    float denom = y[1] - x;
 
     if (fabs(denom) < EPS) denom = (denom >= 0 ? EPS : -EPS);
 
@@ -171,21 +173,21 @@ void deriv(double x, double y[], double dydx[]) {
     dydx[1] = y[0] + 1.0;
 }
 
-bool checkConvergence(double ycurrent, double yprev, double eps) {
+bool checkConvergence(float ycurrent, float yprev, float eps) {
     return fabs(ycurrent - yprev) < eps;  // если разница меньше eps
 }
 
-void runRungeKutta(int n, double xbeg, double xend, double xout[], double yout[]) {
-    double x = xbeg;
-    double y[NZ] = { 1.0, 0.5 }; // начальные условия
-    double h = (xend - xbeg) / n;
+void runRungeKutta(int n, float xbeg, float xend, float xout[], float yout[]) {
+    float x = xbeg;
+    float y[NZ] = { 1.0, 0.5 }; // начальные условия
+    float h = (xend - xbeg) / n;
 
     xout[0] = x;
     yout[0] = y[0];
 
     cout << "\nRUNGE-KUTTA 4TH ORDER, with h = " << h << endl;
     cout << "FOR X = " << setw(p) << fixed << setprecision(4) << x
-         << ", Y = " << setw(p) << y[0] << endl;
+        << ", Y = " << setw(p) << y[0] << endl;
 
     for (int i = 0; i < n; ++i) {
         rungeKuttaStep(x, h, y);
@@ -193,13 +195,13 @@ void runRungeKutta(int n, double xbeg, double xend, double xout[], double yout[]
         yout[i + 1] = y[0];
 
         cout << "FOR X = " << setw(p) << x
-             << ", Y = " << y[0] << endl;
+            << ", Y = " << y[0] << endl;
     }
 }
 
-void rungeKuttaStep(double& x, double h, double y[]) {
-    double k1[NZ], k2[NZ], k3[NZ], k4[NZ], yt[NZ];
-    double x_half = x + h / 2.0, x_full = x + h;
+void rungeKuttaStep(float& x, float h, float y[]) {
+    float k1[NZ], k2[NZ], k3[NZ], k4[NZ], yt[NZ];
+    float x_half = x + h / 2.0, x_full = x + h;
 
     deriv(x, y, k1);
     for (int i = 0; i < NZ; ++i)
@@ -219,4 +221,32 @@ void rungeKuttaStep(double& x, double h, double y[]) {
         y[i] += h / 6.0 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
 
     x = x_full;
+}
+
+void plotHyperbola() {
+    // Массивы для точек
+    float x[maxX], y[maxX];
+
+    for (int i = 0; i < maxX; ++i) {
+        x[i] = i + 1;
+        y[i] = 1.0f / (i + 1);
+    }
+    Dislin d;
+    d.metafl("XWIN");
+    d.disini();
+    d.disini();                  // Инициализация графики
+    d.pagera();                  // Автоматический размер страницы
+    d.complx();                  // Линейный стиль графика
+
+    d.name("X", "X");
+    d.name("Y", "Y");
+    d.titlin("График гиперболы y=1/x", 1);
+
+    // Настройка осей: X от 1 до maxX, шаг 1; Y от 0 до 1, шаг 0.1
+    d.graf(1.0, float(maxX), 1.0, 1.0, 0.0, 1.0, 0.0, 0.1);
+
+    d.color("BLUE");
+    d.curve(x, y, maxX);
+
+    d.disfin();                  // Завершение работы с графикой
 }
