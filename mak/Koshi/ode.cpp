@@ -4,7 +4,6 @@
 #include <string>
 #include <discpp.h>
 
-
 using namespace std;
 
 int NRHS;
