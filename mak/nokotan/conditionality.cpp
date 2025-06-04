@@ -7,7 +7,7 @@ const int Q = 10;
 const float EPS = 1e-4;
 
 void randMatrix(float[][Q], float[]);
-void printSystem(float[][Q], float[]);
+void printMatrix(float[][Q], float[]);
 bool forwardAndBackSubstitution(float[][Q], float[], float[]);
 float calculateMatrixNorm(float[][Q]);
 bool invertMatrix(float[][Q], float[][Q]);
@@ -21,7 +21,7 @@ int main() {
     randMatrix(matrix, b);
 
     cout << "Original system (A | b):" << endl;
-    printSystem(matrix, b);
+    printMatrix(matrix, b);
 
     if (!forwardAndBackSubstitution(matrix, b, solution)) {
         cout << "Matrix is singular or nearly singular. Cannot solve." << endl;
@@ -57,14 +57,14 @@ void randMatrix(float matrix[][Q], float b[]) {
             }
         }
 
-        matrix[i][i] = rowSum + 1.0f; 
+        matrix[i][i] = rowSum + 1.5f; 
 
         b[i] = rand() / CF;
     }
 }
 
 
-void printSystem(float matrix[][Q], float b[]) {
+void printMatrix(float matrix[][Q], float b[]) {
     for (int i = 0; i < Q; ++i) {
         for (int j = 0; j < Q; ++j) {
             cout << setw(8) << fixed << setprecision(2) << matrix[i][j] << " ";
