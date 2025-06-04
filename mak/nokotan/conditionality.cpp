@@ -1,108 +1,126 @@
 ﻿#include <cstdlib>
-#include <ctime>
 #include <iostream>
 #include <iomanip>
 
 using namespace std;
 
 const int Q = 10;
-constexpr int Q_WITH_ONE = Q + 1;
-const int Q_EXT = Q * 2; // Для создания расширенный матрицы в которой исходная и единичная
+const float EPS = 1e-3;
 
-void randMatrix(float[][Q_WITH_ONE]);
-void printMatrix(float[][Q_WITH_ONE]);
-void forwardSubstitution(float[][Q_WITH_ONE], float[]);
-float calculateMatrixNorm(float[][Q_WITH_ONE]);
-float calculateInverseMatrixNorm(float[][Q_WITH_ONE]);
-void checkSolution(float[][Q_WITH_ONE], float[]);
+void randMatrix(float[][Q], float[]);
+void printSystem(float[][Q], float[]);
+bool forwardSubstitution(float[][Q], float[], float[]);
+float calculateMatrixNorm(float[][Q]);
+bool invertMatrix(float[][Q], float[][Q]);
+void checkSolution(float[][Q], float[], float[]);
 
 int main() {
-    float matrix[Q][Q_WITH_ONE];
+    float matrix[Q][Q];
+    float b[Q];
     float solution[Q];
-    randMatrix(matrix);
+    float invMatrix[Q][Q];
 
-    cout << "Original matrix:" << endl;
-    printMatrix(matrix);
+    randMatrix(matrix, b);
 
-    forwardSubstitution(matrix, solution);
+    cout << "Original system (A | b):" << endl;
+    printSystem(matrix, b);
 
-    cout << "Upper triangular matrix:" << endl;
-    printMatrix(matrix);
+    if (!forwardSubstitution(matrix, b, solution)) {
+        cout << "Matrix is singular or nearly singular. Cannot solve." << endl;
+        return EXIT_FAILURE;
+    }
 
-    cout << "Checking solution: "; checkSolution(matrix, solution);
+    checkSolution(matrix, b, solution);
 
-    float conditionNumber = calculateMatrixNorm(matrix) * calculateInverseMatrixNorm(matrix);
-    cout << "Condition number: " << conditionNumber << endl;
+    if (!invertMatrix(matrix, invMatrix)) {
+        cout << "Matrix is singular or nearly singular. Cannot invert." << endl;
+        return EXIT_FAILURE;
+    }
+
+    float normA = calculateMatrixNorm(matrix);
+    float normAinv = calculateMatrixNorm(invMatrix);
+
+    cout << "Matrix norm ||A|| = " << normA << endl;
+    cout << "Inverse matrix norm ||A^-1|| = " << normAinv << endl;
+    cout << "Condition number = ||A|| * ||A^-1|| = " << normA * normAinv << endl;
 
     return EXIT_SUCCESS;
 }
 
-void randMatrix(float matrix[][Q_WITH_ONE]) {
-    float CF = 1.0e+03;
+void randMatrix(float matrix[][Q], float b[]) {
+    float CF = 750.0f;
     srand(time(NULL));
     for (int i = 0; i < Q; ++i) {
-        for (int j = 0; j < Q_WITH_ONE; ++j) {
+        for (int j = 0; j < Q; ++j) {
             matrix[i][j] = rand() / CF;
         }
+        b[i] = rand() / CF;
     }
 }
 
-void printMatrix(float matrix[][Q_WITH_ONE]) {
+void printSystem(float matrix[][Q], float b[]) {
     for (int i = 0; i < Q; ++i) {
         for (int j = 0; j < Q; ++j) {
             cout << setw(8) << fixed << setprecision(2) << matrix[i][j] << " ";
         }
-        cout << " | " << setw(8) << fixed << setprecision(2) << matrix[i][Q];
+        cout << " | " << setw(8) << fixed << setprecision(2) << b[i];
         cout << endl;
     }
     cout << endl;
 }
 
-void forwardSubstitution(float matrix[][Q_WITH_ONE], float solution[]) {
+bool forwardSubstitution(float matrix[][Q], float b[], float solution[]) {
+    float mat[Q][Q];
+    float vec[Q];
+
+    for (int i = 0; i < Q; ++i) {
+        vec[i] = b[i];
+        for (int j = 0; j < Q; ++j) {
+            mat[i][j] = matrix[i][j];
+        }
+    }
+
     for (int i = 0; i < Q; ++i) {
         int maxRow = i;
         for (int k = i + 1; k < Q; ++k) {
-            if (fabs(matrix[k][i]) > fabs(matrix[maxRow][i]))
+            if (fabs(mat[k][i]) > fabs(mat[maxRow][i]))
                 maxRow = k;
         }
+        if (fabs(mat[maxRow][i]) < EPS) return false; // сингулярность
 
         if (maxRow != i) {
-            for (int j = 0; j < Q_WITH_ONE; ++j) {
-                float temp = matrix[maxRow][j];
-                matrix[maxRow][j] = matrix[i][j];
-                matrix[i][j] = temp;
-            }
+            for (int j = 0; j < Q; ++j) swap(mat[maxRow][j], mat[i][j]);
+            swap(vec[maxRow], vec[i]);
         }
 
-        if (fabs(matrix[i][i]) < 1e-6) {
-            cout << "Matrix is singular!" << endl;
-            return;
-        }
-
-        // Приведение к верхнетреугольному виду
         for (int k = i + 1; k < Q; ++k) {
-            float factor = matrix[k][i] / matrix[i][i];
-            for (int j = i; j < Q_WITH_ONE; ++j) {
-                matrix[k][j] -= factor * matrix[i][j];
-                if (fabs(matrix[k][j]) < 1e-4) matrix[k][j] = 0.0;
+            float factor = mat[k][i] / mat[i][i];
+            for (int j = i; j < Q; ++j) {
+                mat[k][j] -= factor * mat[i][j];
+                if (fabs(mat[k][j]) < EPS) mat[k][j] = 0.0f;
             }
+            vec[k] -= factor * vec[i];
+            if (fabs(vec[k]) < EPS) vec[k] = 0.0f;
         }
     }
 
-    // Обратный ход (Back Substitution) для solutions[]
+    // Обратный ход
     for (int i = Q - 1; i >= 0; --i) {
-        solution[i] = matrix[i][Q];
-        for (int j = i + 1; j < Q; ++j) 
-            solution[i] -= matrix[i][j] * solution[j];
- 
-        solution[i] /= matrix[i][i];
+        if (fabs(mat[i][i]) < EPS) return false; // сингулярность
+        solution[i] = vec[i];
+        for (int j = i + 1; j < Q; ++j) {
+            solution[i] -= mat[i][j] * solution[j];
+        }
+        solution[i] /= mat[i][i];
     }
+
+    return true;
 }
 
-float calculateMatrixNorm(float matrix[][Q_WITH_ONE]) {
-    float norm = 0.0;
+float calculateMatrixNorm(float matrix[][Q]) {
+    float norm = 0.0f;
     for (int j = 0; j < Q; ++j) {
-        float colSum = 0.0;
+        float colSum = 0.0f;
         for (int i = 0; i < Q; ++i) {
             colSum += fabs(matrix[i][j]);
         }
@@ -111,61 +129,29 @@ float calculateMatrixNorm(float matrix[][Q_WITH_ONE]) {
     return norm;
 }
 
-float calculateInverseMatrixNorm(float matrix[][Q_WITH_ONE]) {
-    float augmented[Q][Q_EXT];
+bool invertMatrix(float matrix[][Q], float inv[][Q]) {
+    float e[Q];
+    float x[Q];
 
-    for (int i = 0; i < Q; ++i) {
-        for (int j = 0; j < Q; ++j) {
-            augmented[i][j] = matrix[i][j];
-        }
-        for (int j = 0; j < Q; ++j) {
-            augmented[i][j + Q] = (i == j) ? 1.0f : 0.0f; 
-        }
-    }
+    for (int j = 0; j < Q; ++j) {
+        for (int i = 0; i < Q; ++i) e[i] = 0.0f;
+        e[j] = 1.0f;
 
-    for (int i = 0; i < Q; i++) {
-        if (fabs(augmented[i][i]) < 1e-9) {
-            cout << "Matrix is singular" << endl;
-            return -1.0f;
-        }
-        for (int k = i + 1; k < Q; k++) {
-            float factor = augmented[k][i] / augmented[i][i];
-            for (int j = 0; j < 2 * Q; ++j) {
-                augmented[k][j] -= factor * augmented[i][j];
-            }
-        }
-    }
+        if (!forwardSubstitution(matrix, e, x))
+            return false; // сингулярна
 
-    // Обратный ход для augmented
-    for (int i = Q - 1; i >= 0; i--) {
-        for (int j = Q; j < 2 * Q; j++) {
-            augmented[i][j] /= augmented[i][i];
-        }
-        for (int k = i - 1; k >= 0; k--) {
-            float factor = augmented[k][i];
-            for (int j = Q; j < 2 * Q; j++) {
-                augmented[k][j] -= factor * augmented[i][j];
-            }
-        }
+        for (int i = 0; i < Q; ++i)
+            inv[i][j] = x[i];
     }
-
-    float norm = 0.0f;
-    for (int j = Q; j < 2 * Q; j++) {
-        float colSum = 0.0f;
-        for (int i = 0; i < Q; i++) {
-            colSum += fabs(augmented[i][j]);
-        }
-        norm = max(norm, colSum);
-    }
-    return norm;
+    return true;
 }
 
-void checkSolution(float matrix[][Q_WITH_ONE], float solution[]) {
+void checkSolution(float matrix[][Q], float b[], float solution[]) {
     for (int i = 0; i < Q; ++i) {
-        float sum = 0;
+        float sum = 0.0f;
         for (int j = 0; j < Q; ++j) sum += matrix[i][j] * solution[j];
 
-        if (fabs(sum - matrix[i][Q]) > 1e-4) {
+        if (fabs(sum - b[i]) > EPS) {
             cout << "Solution is incorrect" << endl;
             return;
         }
