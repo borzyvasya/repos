@@ -14,7 +14,7 @@ const double half = 0.5, one = 1.0, six = 6.0, tmax = 3600.0, eps =
 
 const double L = 1.0;      // длина стержня
 const double scale = 100.0; // масштабный коэффициент температуры
-const double tol = 0.1;
+const double tol = 0.1;  // пороговое значение времени для начальных условий
 
 const double alpha = 1.1e-4; // теплопроводность меди 
 
