@@ -1,0 +1,7 @@
+﻿lld-link: : error : undefined symbol: void __cdecl computeMinMax(int, double const *const, double const *const, double const *const, double &, double &, double &)
+  >>> referenced by odeee.cpp
+  >>>               x64/Release/odeee.obj
+  
+lld-link: : error : undefined symbol: void __cdecl implicitEuler(double &, double, double *const)
+  >>> referenced by odeee.cpp
+  >>>               x64/Release/odeee.obj

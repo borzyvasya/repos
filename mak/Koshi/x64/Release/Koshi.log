@@ -1,0 +1,29 @@
+﻿  ode.cpp
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(13,19): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(132,27): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(160,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(174,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(205,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(209,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(213,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(222,25): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(232,18): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u0413' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u0440' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u0430' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u0444' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u0438' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u043A' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u0433' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u043F' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u0435' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u0431' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u043E' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u043B' cannot be represented in the current code page (1252)
+C:\Users\Me\source\repos\borzyvasya\labas\mak\Koshi\ode.cpp(244,14): warning C4566: character represented by universal-character-name '\u044B' cannot be represented in the current code page (1252)
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 29 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Koshi.vcxproj -> C:\Users\Me\source\repos\borzyvasya\labas\mak\nokotan\x64\Release\koshi.exe

@@ -49,6 +49,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kohi", "..\kohi\kohi.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Diff", "..\Diff\Diff.vcxproj", "{0AE3E5E3-9CFC-43CE-942E-6FE633866FCA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "implicitscheme", "..\implicitscheme\implicitscheme.vcxproj", "{00D9C680-120F-4FE9-BC57-8AAADCF51886}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -241,6 +243,14 @@ Global
 		{0AE3E5E3-9CFC-43CE-942E-6FE633866FCA}.Release|x64.Build.0 = Release|x64
 		{0AE3E5E3-9CFC-43CE-942E-6FE633866FCA}.Release|x86.ActiveCfg = Release|Win32
 		{0AE3E5E3-9CFC-43CE-942E-6FE633866FCA}.Release|x86.Build.0 = Release|Win32
+		{00D9C680-120F-4FE9-BC57-8AAADCF51886}.Debug|x64.ActiveCfg = Debug|x64
+		{00D9C680-120F-4FE9-BC57-8AAADCF51886}.Debug|x64.Build.0 = Debug|x64
+		{00D9C680-120F-4FE9-BC57-8AAADCF51886}.Debug|x86.ActiveCfg = Debug|Win32
+		{00D9C680-120F-4FE9-BC57-8AAADCF51886}.Debug|x86.Build.0 = Debug|Win32
+		{00D9C680-120F-4FE9-BC57-8AAADCF51886}.Release|x64.ActiveCfg = Release|x64
+		{00D9C680-120F-4FE9-BC57-8AAADCF51886}.Release|x64.Build.0 = Release|x64
+		{00D9C680-120F-4FE9-BC57-8AAADCF51886}.Release|x86.ActiveCfg = Release|Win32
+		{00D9C680-120F-4FE9-BC57-8AAADCF51886}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
